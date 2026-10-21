@@ -1,0 +1,9 @@
+{
+  "name": "Donut SMP Economy",
+  "short_name": "Donut Economy",
+  "description": "An offline-friendly Donut SMP economy game",
+  "start_url": "./donut_smp_live_economy_expanded.html",
+  "display": "standalone",
+  "background_color": "#0b0d12",
+  "theme_color": "#0b0d12"
+}

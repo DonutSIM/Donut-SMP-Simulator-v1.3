@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Donut SMP Live Economy</title>
+<style>
+:root{--bg:#0b0d12;--panel:#141821;--panel2:#1b202b;--line:#2b3240;--text:#f4f6fb;--muted:#9ba5b5;--pink:#ff4d8d;--gold:#ffd166;--green:#48e0a4;--blue:#78a9ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#202036 0,#0b0d12 52%);color:var(--text);font:15px/1.45 Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer;border:1px solid #3b4558;background:#262d3b;color:white;padding:10px 13px;border-radius:10px;font-weight:750;transition:.15s}button:hover{transform:translateY(-1px);border-color:var(--pink);filter:brightness(1.12)}button.primary{background:linear-gradient(135deg,#ff4d8d,#ff7b62);border:0;color:#fff}button.good{background:#173d35;border-color:#286e5b;color:#a6ffdc}button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+header{position:sticky;top:0;z-index:5;background:#0c0f16eF;backdrop-filter:blur(15px);border-bottom:1px solid var(--line);padding:14px clamp(14px,3vw,38px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:950;letter-spacing:-.6px}.donut{width:36px;height:36px;border-radius:50%;background:radial-gradient(circle at center,#171923 0 22%,transparent 24%),conic-gradient(#ff7b62,#ff4d8d,#ffc15c,#ff7b62);border:5px solid #f9a2a6;box-shadow:0 0 22px #ff4d8d55}.brand span{color:var(--pink)}.wallet{border:1px solid #67542c;background:#292317;padding:9px 14px;border-radius:12px;color:var(--gold);font-weight:900;white-space:nowrap}
+main{max-width:1220px;margin:auto;padding:24px clamp(12px,3vw,30px) 50px}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:18px;margin-bottom:20px}.hero-card,.panel,.stat{background:linear-gradient(145deg,#191e29,#12151d);border:1px solid var(--line);border-radius:18px}.hero-card{padding:25px;position:relative;overflow:hidden}.hero-card:after{content:"";position:absolute;width:220px;height:220px;right:-65px;top:-70px;border-radius:50%;border:35px solid #ff4d8d12;box-shadow:0 0 0 25px #ff4d8d08}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--pink);font-weight:900}.hero h1{font-size:clamp(28px,4vw,44px);line-height:1.03;letter-spacing:-1.5px;margin:10px 0}.hero p{color:var(--muted);max-width:550px;margin-bottom:18px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:16px}.stat small{color:var(--muted);display:block;margin-bottom:7px}.stat strong{font-size:clamp(17px,2vw,25px);letter-spacing:-.6px}.progress{height:7px;border-radius:99px;background:#2b303c;overflow:hidden;margin-top:12px}.progress div{height:100%;background:linear-gradient(90deg,var(--pink),var(--gold));width:0;transition:width .3s}.panel{padding:19px;margin-bottom:18px}.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:15px}.panel h2{margin:0;font-size:19px;letter-spacing:-.4px}.sub{color:var(--muted);font-size:13px;margin-top:3px}.tabs{display:flex;gap:7px;flex-wrap:wrap;margin:22px 0 18px}.tabs button{background:#171b24;color:var(--muted);border-color:var(--line)}.tabs button.active{background:#3a1d2b;border-color:#a93c67;color:#fff}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.item{background:linear-gradient(150deg,#202633,#171b24);border:1px solid #303849;border-radius:15px;padding:14px;display:flex;flex-direction:column;min-width:0}.item-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.emoji{font-size:32px;filter:drop-shadow(0 5px 8px #0005)}.tag{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);background:#2a303c;border-radius:6px;padding:4px 6px}.item h3{margin:10px 0 2px;font-size:15px}.item .desc{color:var(--muted);font-size:12px;min-height:34px}.price{color:var(--gold);font-weight:900;margin:9px 0 12px}.item button{margin-top:auto;width:100%}.controls{display:flex;gap:8px;flex-wrap:wrap}.controls input,.controls select,input,select{background:#0e1118;border:1px solid #343d4d;color:#fff;border-radius:9px;padding:10px;min-width:0}.controls input{flex:1;min-width:130px}.market-list{display:grid;gap:9px}.listing,.order-row,.inventory-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;background:#191e28;border:1px solid #2c3442;border-radius:12px}.listing-left{display:flex;align-items:center;gap:11px;min-width:0}.listing-left .emoji{font-size:25px}.listing h3{font-size:14px;margin:0}.listing small{color:var(--muted)}.listing-actions{display:flex;align-items:center;gap:9px}.listing-actions strong{color:var(--gold);white-space:nowrap}.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed #343d4d;border-radius:12px}.sell-form{display:grid;grid-template-columns:1.4fr .7fr .7fr auto;gap:9px;margin-bottom:15px}.sell-form select,.sell-form input{width:100%}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}.notice{border-radius:10px;padding:10px 12px;margin-bottom:12px;background:#17352e;color:#a8f6d9;border:1px solid #285f50;display:none}.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#f8f8ff;color:#111;padding:12px 18px;border-radius:12px;box-shadow:0 12px 40px #0008;z-index:20;font-weight:800;transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}.reset{font-size:12px;color:var(--muted);background:transparent;border-color:#343d4d}.footer{text-align:center;color:#687386;font-size:12px;padding:15px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.two-col{grid-template-columns:1fr}}
+@media(max-width:560px){header{padding:12px}.brand{font-size:16px}.wallet{font-size:13px;padding:8px}.stats{grid-template-columns:1fr 1fr}.stats .stat:last-child{grid-column:span 2}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.item{padding:11px}.sell-form{grid-template-columns:1fr 1fr}.sell-form select{grid-column:span 2}.sell-form button{grid-column:span 2}.listing{align-items:flex-start}.listing-actions{flex-direction:column;align-items:flex-end}.hero-card{padding:20px}}
+</style>
+
+<style id="minecraft-ui-skin">
+/* Minecraft-inspired inventory GUI skin */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+:root{
+ --bg:#252525;--panel:#c6c6c6;--panel2:#8b8b8b;--line:#373737;
+ --text:#242424;--muted:#454545;--pink:#8b63c7;--gold:#fff05a;
+ --green:#55ff55;--blue:#55ffff;
+}
+*{image-rendering:pixelated}
+body{
+ background-color:#252525;
+ background-image:linear-gradient(45deg,#2d2d2d 25%,transparent 25%),linear-gradient(-45deg,#2d2d2d 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#2d2d2d 75%),linear-gradient(-45deg,transparent 75%,#2d2d2d 75%);
+ background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0;
+ color:#fff;font-family:Arial,Helvetica,sans-serif;letter-spacing:0;
+}
+header{
+ background:#292929;border-bottom:3px solid #101010;box-shadow:inset 0 -2px #555;
+}
+.brand{font-family:'Press Start 2P',monospace;font-size:13px;letter-spacing:-1px;text-shadow:2px 2px #222}
+.brand span{color:#ff55ff}
+.donut{border-radius:0;border:4px solid #fff;background:radial-gradient(circle at center,#4b2424 0 23%,transparent 24%),conic-gradient(#ff55ff,#ff9a00,#ffff55,#ff55ff);box-shadow:3px 3px #111}
+.wallet{border-radius:0;border:2px solid #111;box-shadow:inset 2px 2px #777,inset -2px -2px #444;background:#373737;color:#ffff55}
+main{max-width:1220px}
+.hero-card,.panel,.stat{
+ background:#c6c6c6;color:#222;border:3px solid #fff;border-right-color:#555;border-bottom-color:#555;
+ border-radius:0;box-shadow:inset 2px 2px #eee,inset -2px -2px #777;
+}
+.hero-card:after{border-radius:0;border-color:#fff1;box-shadow:0 0 0 25px #fff1}
+.eyebrow{font-family:'Press Start 2P',monospace;font-size:9px;color:#6b35a8;letter-spacing:0;line-height:1.8}
+.hero h1{font-family:'Press Start 2P',monospace;font-size:clamp(17px,2.5vw,27px);line-height:1.6;letter-spacing:-1.4px;color:#222;text-shadow:2px 2px #eee}
+.hero h1 span{color:#7b36ae!important}
+.hero p,.sub,.stat small,.item .desc,.listing small{color:#444}
+.stat{padding:13px}.stat strong{font-family:'Press Start 2P',monospace;font-size:14px;line-height:1.8;color:#222}
+.progress{height:10px;border:2px solid #222;border-radius:0;background:#555}.progress div{border-radius:0;background:#55ff55}
+.tabs{gap:4px}
+.tabs button,button{
+ border-radius:0;background:#777;color:#fff;border:2px solid #111;
+ box-shadow:inset 2px 2px #bbb,inset -2px -2px #444,2px 2px #222;
+ text-shadow:1px 1px #333;transition:none;
+}
+button:hover{transform:none;filter:brightness(1.12);border-color:#fff}
+button.primary{background:#6b3a9a;color:#fff;border:2px solid #111;box-shadow:inset 2px 2px #b18ad4,inset -2px -2px #3d205a,2px 2px #222}
+button.good{background:#397b39;color:#fff;border-color:#111;box-shadow:inset 2px 2px #8fca8f,inset -2px -2px #1c4c1c,2px 2px #222}
+.tabs button.active{background:#9a70c3;color:#fff;border-color:#fff;box-shadow:inset 2px 2px #d7b9f4,inset -2px -2px #5d3a82}
+.panel h2{font-family:'Press Start 2P',monospace;font-size:13px;line-height:1.9;color:#222;letter-spacing:-.8px}
+.tag{border-radius:0;background:#555;color:#fff;border:1px solid #222}
+.grid{gap:4px}
+.item{
+ background:#8b8b8b;border:2px solid #fff;border-right-color:#555;border-bottom-color:#555;
+ border-radius:0;padding:9px;box-shadow:inset 2px 2px #aaa,inset -2px -2px #666;
+}
+.item-top{min-height:38px}
+.emoji{font-size:29px;filter:drop-shadow(2px 2px 0 #333)}
+.item h3{color:#fff;text-shadow:1px 1px #333;font-weight:800}
+.item .desc{color:#f3f3f3;text-shadow:1px 1px #333}
+.price{color:#ffff55;text-shadow:1px 1px #333}
+.item button{width:100%}
+.controls input,.controls select,input,select{
+ border-radius:0;background:#373737;color:#fff;border:2px solid #111;
+ box-shadow:inset 2px 2px #171717,inset -2px -2px #777;
+}
+.sell-form{gap:5px}
+.listing,.order-row,.inventory-row{
+ border-radius:0;background:#8b8b8b;border:2px solid #fff;border-right-color:#555;border-bottom-color:#555;
+ box-shadow:inset 1px 1px #aaa,inset -1px -1px #666;color:#fff;
+}
+.listing h3,.inventory-row h3{color:#fff;text-shadow:1px 1px #333}
+.listing small{color:#f0f0f0;text-shadow:1px 1px #333}
+.listing-actions strong{color:#ffff55;text-shadow:1px 1px #333}
+.empty{border:2px dashed #777;border-radius:0;color:#333;background:#aaa}
+.footer{color:#ddd;text-shadow:1px 1px #111}
+.toast{border-radius:0;border:3px solid #222;box-shadow:inset 2px 2px #fff,inset -2px -2px #888,3px 3px #111;font-family:Arial,sans-serif}
+@media(max-width:560px){.brand{font-size:10px}.hero h1{font-size:16px}.stat strong{font-size:11px}.panel h2{font-size:11px}}
+</style>
+
+
+<style id="live-minecraft-upgrade">
+:root{--mc-purple:#aa55ff;--mc-green:#55ff55;--mc-red:#ff5555;--mc-cyan:#55ffff}
+body{background:#252525;background-image:linear-gradient(45deg,#2c2c2c 25%,transparent 25%),linear-gradient(-45deg,#2c2c2c 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#2c2c2c 75%),linear-gradient(-45deg,transparent 75%,#2c2c2c 75%);background-size:16px 16px;background-position:0 0,0 8px,8px -8px,-8px 0}
+header{border-bottom:3px solid #080808;background:#202020}
+main{max-width:1320px}
+.serverbar{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;background:#111;border:2px solid #555;box-shadow:inset 2px 2px #333,inset -2px -2px #080808;padding:10px 13px;margin-bottom:14px;color:#ddd;font-family:monospace;font-size:12px}
+.live-dot{display:inline-block;width:8px;height:8px;background:#55ff55;box-shadow:0 0 8px #55ff55;border-radius:50%;margin-right:7px}
+.hudgrid{display:grid;grid-template-columns:1.5fr .8fr;gap:14px;margin-bottom:14px}
+.hudbox{background:#151515;border:2px solid #666;box-shadow:inset 2px 2px #333,inset -2px -2px #050505;padding:13px;color:#eee}
+.hudbox h3{font-family:'Press Start 2P',monospace;font-size:10px;line-height:2;color:#55ffff;margin:0 0 10px}
+.hudstats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.hudstat{background:#292929;border:1px solid #555;padding:8px;font-size:11px;color:#aaa}
+.hudstat strong{display:block;color:#ffff55;font-size:15px;margin-top:4px}
+.ticker{display:flex;gap:7px;overflow:hidden;white-space:nowrap}
+.ticker span{background:#222;border:1px solid #444;padding:6px 8px;font-family:monospace;font-size:11px}
+.market-change.up{color:#55ff55}.market-change.down{color:#ff5555}
+.ai-feed{display:grid;gap:7px;max-height:245px;overflow:auto}
+.ai-event{display:flex;align-items:flex-start;gap:8px;background:#242424;border:1px solid #4a4a4a;padding:8px;font-size:12px;color:#ddd}
+.ai-avatar{flex:0 0 27px;height:27px;display:grid;place-items:center;background:#555;border:2px solid #111;box-shadow:inset 1px 1px #aaa;font-size:15px}
+.ai-event strong{color:#55ffff}.ai-event em{font-style:normal;color:#ffff55}
+#liveStatus{color:#55ff55}
+.market-table{width:100%;border-collapse:separate;border-spacing:2px;font-size:13px}
+.market-table th{background:#3b3b3b;color:#fff;text-align:left;padding:9px}
+.market-table td{background:#858585;color:#fff;padding:9px;border:1px solid #aaa;text-shadow:1px 1px #333}
+.market-table td.money{color:#ffff55;font-weight:bold;white-space:nowrap}
+.market-table button{padding:6px 8px;font-size:11px}
+@media(max-width:800px){.hudgrid{grid-template-columns:1fr}.hudstats{grid-template-columns:repeat(2,1fr)}.market-table{font-size:11px}.market-table th,.market-table td{padding:6px}}
+</style>
+
+
+<style id="gameplay-expansion-css">
+html{height:auto;overflow-y:auto;overscroll-behavior:auto}
+body{width:100%;height:auto;min-height:100vh;margin:0;overflow-x:hidden;overflow-y:auto;overscroll-behavior:auto;touch-action:pan-y}
+header{flex:0 0 auto}
+main{height:auto;min-height:calc(100vh - 67px);overflow:visible;display:block;padding-top:12px;padding-bottom:24px}
+.serverbar{flex:0 0 auto;margin-bottom:8px;padding:7px 10px}
+.hudgrid{flex:0 0 auto;margin-bottom:8px;gap:8px}
+.hudbox{padding:8px}
+.hudbox h3{margin-bottom:5px}
+.hero{flex:0 0 auto;margin-bottom:8px;gap:8px}
+.hero-card{padding:13px 17px}
+.hero h1{margin:5px 0;font-size:clamp(15px,2vw,23px)}
+.hero p{margin:5px 0 9px;font-size:12px}
+.hero .progress{margin-top:7px}
+.stats{gap:6px}
+.stat{padding:8px}
+.stat small{margin-bottom:2px}
+.tabs{flex:0 0 auto;margin:7px 0 8px;gap:4px}
+.tabs button{padding:8px 10px;font-size:12px}
+.tab-content{min-height:0;overflow:visible;overscroll-behavior:auto;touch-action:pan-y;padding:1px 3px 14px}
+.tab-content .panel{margin-bottom:10px}
+.panel{padding:12px}
+.panel-head{margin-bottom:9px}
+.grid{gap:5px}
+.item{padding:8px}
+.item .desc{min-height:25px}
+.item h3{margin:5px 0 0}
+.item .price{margin:5px 0 7px}
+.footer{display:none}
+#aiPanel{display:none!important}
+.ai-feed{max-height:150px}
+@media(max-width:800px){
+ main{height:calc(100dvh - 60px);padding:8px 8px 4px}
+ .serverbar{font-size:10px}
+ .hudgrid{grid-template-columns:1fr;gap:5px}
+ .hudgrid .hudbox:first-child{display:none}
+ .hero{grid-template-columns:1fr}
+ .hero-card{padding:9px 12px}
+ .hero h1{font-size:15px}
+ .hero p{display:none}
+ .stats{grid-template-columns:repeat(3,1fr)}
+ .stats .stat:last-child{grid-column:auto}
+ .stat strong{font-size:12px}
+ .stat small{font-size:10px}
+ .tabs{overflow-x:auto;flex-wrap:nowrap;padding:2px 2px 5px}
+ .tabs button{white-space:nowrap;flex:0 0 auto}
+ .tab-content{padding-bottom:20px}
+ .panel h2{font-size:10px}
+}
+@media(max-height:740px){
+ .hudgrid{display:none}
+ .hero-card{padding:8px 12px}
+ .hero h1{font-size:15px}
+ .hero p{display:none}
+ .stats .stat{padding:6px}
+}
+</style>
+
+</head>
+<body>
+<header><div class="brand"><div class="donut"></div>DONUT <span>ECONOMY</span></div><div style="display:flex;align-items:center;gap:8px"><button onclick="openSettings()">⚙️ Settings</button><div class="wallet">🍩 <span id="moneyTop">$250</span></div></div></header>
+<main>
+
+<div class="serverbar">
+  <span><span class="live-dot"></span><b id="liveStatus">LIVE MARKET: CONNECTED</b></span>
+  <span>SERVER: DONUT-SIM-01</span><span id="marketClock">TICK #1</span><span>MODE: SMART NPC TRADERS</span>
+</div>
+<section class="hudgrid">
+  <div class="hudbox">
+    <h3>📈 LIVE MARKET PRICES</h3>
+    <div class="ticker" id="priceTicker"></div>
+    <div class="sub" style="color:#aaa;margin-top:10px">Prices shift every few seconds as simulated traders buy, sell, hoard and react to demand.</div>
+  </div>
+  <div class="hudbox">
+    <h3>🤖 SMART AI TRADERS</h3>
+    <div class="hudstats">
+      <div class="hudstat">Active traders<strong id="aiCount">12</strong></div>
+      <div class="hudstat">Trades today<strong id="tradeCount">0</strong></div>
+      <div class="hudstat">Market mood<strong id="marketMood">Balanced</strong></div>
+      <div class="hudstat">Next tick<strong id="tickTimer">4s</strong></div>
+    </div>
+  </div>
+</section>
+
+<section class="hero">
+ <div class="hero-card"><div class="eyebrow">Your grind starts here</div><h1>Build your empire.<br><span style="color:var(--pink)">Get ridiculously rich.</span></h1><p>Buy low, sell high, complete player orders and flip the auction house. Every donut counts. Can you reach billionaire status?</p><div class="controls"><button class="primary" onclick="dailyClaim()">🎁 Claim daily bonus</button><button onclick="work()">⛏️ Quick grind</button></div><div class="progress"><div id="levelBar"></div></div><div class="sub" id="levelText">Level 1 · $0 / $1,000 toward next level</div></div>
+ <div class="stats"><div class="stat"><small>💰 Wallet</small><strong id="moneyStat">$250</strong><div class="sub">Spendable cash</div></div><div class="stat"><small>📦 Items owned</small><strong id="itemCount">0</strong><div class="sub">In your inventory</div></div><div class="stat"><small>🏆 Net worth</small><strong id="netWorth">$250</strong><div class="sub">Wallet + inventory</div></div></div>
+</section>
+<div class="tabs">
+ <button class="active" data-tab="shop" onclick="switchTab('shop',this)">🛒 Shop & Sell</button><button data-tab="auction" onclick="switchTab('auction',this)">🔨 Auction House</button><button data-tab="orders" onclick="switchTab('orders',this)">📜 Orders</button><button data-tab="inventory" onclick="switchTab('inventory',this)">🎒 Inventory</button><button data-tab="crystal" onclick="switchTab('crystal',this)">💥 Crystal PvP</button><button data-tab="farms" onclick="switchTab('farms',this)">🌿 Farms</button><button data-tab="ender" onclick="switchTab('ender',this)">📦 Ender Chest</button><button data-tab="gear" onclick="switchTab('gear',this)">🛡️ Armour</button>
+</div>
+<section id="shop" class="tab-content">
+ <div class="panel"><div class="panel-head"><div><h2>Market stall</h2><div class="sub">Buy stock from the server, then sell it for profit.</div></div><span class="tag">SERVER SHOP</span></div><div id="shopGrid" class="grid"></div></div>
+ <div class="panel"><div class="panel-head"><div><h2>Sell your items</h2><div class="sub">Instantly sell inventory at the current server buy-back price.</div></div></div><div id="sellGrid" class="grid"></div></div>
+</section>
+<section id="auction" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>🔨 Auction House</h2><div class="sub">List your items for other players, or buy a bargain listing.</div></div><span class="tag">PLAYER MARKET</span></div>
+ <div class="sell-form"><select id="listItem"></select><input id="listQty" type="number" min="1" value="1" placeholder="Quantity"><input id="listPrice" type="number" min="1" value="100" placeholder="Total price"><button class="primary" onclick="createListing()">Create listing</button></div><div class="sub" style="margin-bottom:12px">A 5% auction fee is charged when you list an item.</div><div id="auctionList" class="market-list"></div></div>
+</section>
+<section id="orders" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>📜 Player orders</h2><div class="sub">Fulfil buy orders from your inventory to earn instant cash.</div></div><button onclick="refreshOrders()">↻ New orders</button></div><div id="ordersList" class="market-list"></div></div>
+ <div class="panel"><div class="panel-head"><div><h2>✍️ Create your own buy order</h2><div class="sub">Set the item, quantity and price per item. Money is reserved until filled or cancelled.</div></div></div><div class="sell-form"><select id="createOrderItem"></select><input id="createOrderQty" type="number" min="1" value="1" placeholder="Quantity"><input id="createOrderUnit" type="number" min="1" value="100" placeholder="Price each"><button class="primary" onclick="createPlayerOrder()">Post order</button></div><div id="myOrdersList" class="market-list"></div></div>
+</section>
+<section id="inventory" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>🎒 Your inventory</h2><div class="sub">Everything you've collected. Sell it or put it up for auction.</div></div><button onclick="switchTab('auction',document.querySelector('[data-tab=auction]'))">List an item ↗</button></div><div id="inventoryList" class="market-list"></div></div>
+</section>
+
+
+<section id="crystal" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>💥 Crystal PvP Arena</h2><div class="sub">Watch two AI fighters battle. Pick a winner before the round starts and bet your money.</div></div><span class="tag">SIMULATED ARENA</span></div>
+  <div class="hudbox" style="text-align:center;margin-bottom:10px">
+   <div id="arenaState" style="font-family:monospace;color:#55ff55;margin-bottom:10px">ARENA READY — choose a fighter</div>
+   <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center">
+    <div class="hudbox"><div style="font-size:34px">⚔️</div><b id="fighterA">VoidWalker</b><div id="hpA" style="color:#55ff55;margin-top:6px">❤❤❤❤❤</div></div>
+    <div style="font-family:monospace;font-size:22px;color:#ff55ff">VS</div>
+    <div class="hudbox"><div style="font-size:34px">🗡️</div><b id="fighterB">CrystalKing</b><div id="hpB" style="color:#55ff55;margin-top:6px">❤❤❤❤❤</div></div>
+   </div>
+   <div id="arenaLog" class="sub" style="color:#ddd;margin:10px 0">The next fight is unpredictable. Choose wisely.</div>
+   <div class="controls" style="justify-content:center"><button class="primary" onclick="betArena('A')">Bet on Fighter A</button><button class="primary" onclick="betArena('B')">Bet on Fighter B</button><input id="arenaBet" type="number" min="1" value="25" style="max-width:110px" aria-label="Bet amount"><button onclick="startArena()">Start next fight</button></div>
+   <div class="sub" style="margin-top:8px">Winner pays 1.8× your stake (including stake). No real players or real-money gambling; outcomes are simulated.</div>
+  </div>
+  <div class="panel-head"><h2>🏆 Arena history</h2></div><div id="arenaHistory" class="market-list"></div>
+ </div>
+</section>
+<section id="farms" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>🌿 Build money farms</h2><div class="sub">Buy farm plots, then collect their output every few seconds while this game is open.</div></div><span class="tag">PASSIVE INCOME</span></div><div id="farmGrid" class="grid"></div></div>
+ <div class="panel"><h2>📈 Your farms</h2><div class="sub">Upgrade your production or collect ready items and sell them in the shop.</div><div id="myFarms" class="market-list" style="margin-top:10px"></div></div>
+</section>
+<section id="ender" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>📦 Ender Chest</h2><div class="sub">Private storage shared between your game sessions in this browser. Items stored here cannot be sold until withdrawn.</div></div><span class="tag">27 SLOTS</span></div><div id="enderGrid" class="grid"></div></div>
+</section>
+<section id="gear" class="tab-content" hidden>
+ <div class="panel"><div class="panel-head"><div><h2>🛡️ Armour & Gear</h2><div class="sub">Collect gear for your profile and flex your balance. Gear is collectible; it does not affect the economy yet.</div></div><span class="tag">EQUIPMENT</span></div><div id="gearGrid" class="grid"></div></div>
+</section>
+
+<section class="panel" id="aiPanel">
+ <div class="panel-head"><div><h2>🤖 AI Trading Chat</h2><div class="sub">NPC traders make market decisions and post activity messages.</div></div><span class="tag"><span class="live-dot"></span>LIVE FEED</span></div>
+ <div id="aiFeed" class="ai-feed"></div>
+</section>
+
+<div class="footer">Minecraft-inspired GUI simulator · Single-player test build · Progress saves in this browser.</div>
+</main><div class="toast" id="toast"></div>
+<script>
+const ITEMS=[
+{id:'cobble',name:'Cobblestone',emoji:'🪨',buy:12,sell:5,desc:'The classic starter block.',tag:'COMMON'},
+{id:'wood',name:'Oak Log',emoji:'🪵',buy:25,sell:11,desc:'Useful, stackable and easy to flip.',tag:'COMMON'},
+{id:'iron',name:'Iron Ingot',emoji:'🔩',buy:95,sell:55,desc:'A reliable mid-game commodity.',tag:'UNCOMMON'},
+{id:'gold',name:'Gold Ingot',emoji:'🟨',buy:180,sell:110,desc:'Shiny, valuable and always moving.',tag:'UNCOMMON'},
+{id:'diamond',name:'Diamond',emoji:'💎',buy:650,sell:420,desc:'A premium item for serious traders.',tag:'RARE'},
+{id:'emerald',name:'Emerald',emoji:'🟢',buy:490,sell:315,desc:'Villager-approved green money.',tag:'RARE'},
+{id:'netherite',name:'Netherite Scrap',emoji:'⬛',buy:1850,sell:1250,desc:'High risk, high value.',tag:'EPIC'},
+{id:'totem',name:'Totem of Undying',emoji:'🗿',buy:3200,sell:2200,desc:'A luxury collectible.',tag:'LEGENDARY'}
+ ,
+{id:'netherite_sword',name:'Netherite Sword',emoji:'⚔️',buy:18000,sell:12500,desc:'Rare netherite weapon from the shard shop.',tag:'SHARD SHOP'},
+{id:'netherite_pickaxe',name:'Netherite Pickaxe',emoji:'⛏️',buy:16000,sell:11000,desc:'Premium netherite mining tool.',tag:'SHARD SHOP'},
+{id:'netherite_chestplate',name:'Netherite Chestplate',emoji:'🛡️',buy:24000,sell:17000,desc:'Heavy netherite armour.',tag:'SHARD SHOP'},
+{id:'skeleton_bone',name:'Bones',emoji:'🦴',buy:90,sell:55,desc:'Bones generated by skeleton spawners.',tag:'MOB DROP'}
+];
+const $=id=>document.getElementById(id); const fmt=n=>'$'+Math.floor(n).toLocaleString('en-US');
+let state;
+function fresh(){return {money:250,inv:{},listings:[],orders:[],nextId:1,claimedDay:'',lastWork:0,earned:0,transactions:0}}
+try{state=JSON.parse(localStorage.getItem('donutEconomySave'))||fresh()}catch(e){state=fresh()}
+function save(){localStorage.setItem('donutEconomySave',JSON.stringify(state));render()}
+function item(id){return ITEMS.find(x=>x.id===id)}
+function countItems(){return Object.values(state.inv).reduce((a,b)=>a+b,0)}
+function invValue(){return Object.entries(state.inv).reduce((a,[id,q])=>a+q*(item(id)?.sell||0),0)}
+function level(){return Math.floor(Math.sqrt(Math.max(0,state.earned)/1000))+1}
+function notify(t){let el=$('toast');el.textContent=t;el.classList.add('show');clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove('show'),2300)}
+function addItem(id,q){state.inv[id]=(state.inv[id]||0)+q;if(state.inv[id]<=0)delete state.inv[id]}
+function spend(n){if(state.money<n){notify('Not enough money!');return false}state.money-=n;return true}
+function earn(n){state.money+=n;state.earned+=n;state.transactions++}
+function buy(id,q=1){let it=item(id),cost=it.buy*q;if(!spend(cost))return;addItem(id,q);save();notify(`Bought ${q}× ${it.name} for ${fmt(cost)}`)}
+function sell(id,q=1){let it=item(id);q=Math.min(q,state.inv[id]||0);if(q<1)return;let total=it.sell*q;addItem(id,-q);earn(total);save();notify(`Sold ${q}× ${it.name} for ${fmt(total)}`)}
+function switchTab(id,btn){document.querySelectorAll('.tab-content').forEach(x=>x.hidden=x.id!==id);document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('active',x.dataset.tab===id));render()}
+function dailyClaim(){let day=new Date().toISOString().slice(0,10);if(state.claimedDay===day){notify('Daily bonus already claimed — come back tomorrow!');return}state.claimedDay=day;earn(500+Math.floor(Math.random()*251));save();notify('Daily bonus claimed! Cash added to wallet.')}
+function work(){let now=Date.now();if(now-state.lastWork<3500){notify('Catch your breath — try again in a moment.');return}state.lastWork=now;let payout=35+Math.floor(Math.random()*66);earn(payout);save();notify(`You completed a quick grind and earned ${fmt(payout)}!`)}
+function createListing(){let id=$('listItem').value,q=Math.floor(+$('listQty').value),price=Math.floor(+$('listPrice').value);if(!id||q<1||price<1){notify('Choose an item, quantity and price.');return}if((state.inv[id]||0)<q){notify('You do not have enough items.');return}let fee=Math.max(1,Math.ceil(price*.05));if(!spend(fee))return;addItem(id,-q);state.listings.unshift({id:state.nextId++,item:id,qty:q,price,owner:'You',mine:true});save();notify(`Listed ${q}× ${item(id).name}. Listing fee: ${fmt(fee)}.`)}
+function buyListing(id){let l=state.listings.find(x=>x.id===id);if(!l)return;if(!spend(l.price))return;addItem(l.item,l.qty);state.listings=state.listings.filter(x=>x.id!==id);state.earned+=0;state.transactions++;save();notify(`Purchased ${l.qty}× ${item(l.item).name}!`)}
+function cancelListing(id){let l=state.listings.find(x=>x.id===id);if(!l||!l.mine)return;addItem(l.item,l.qty);state.listings=state.listings.filter(x=>x.id!==id);save();notify('Listing cancelled; items returned.')}
+function generateListings(){let names=['BlockBargain','xXMinerXx','DonutDealer','CobbleKing','EmeraldEnjoyer','CraftyFox'];for(let i=0;i<5;i++){let it=ITEMS[Math.floor(Math.random()*ITEMS.length)],q=1+Math.floor(Math.random()*5),price=Math.max(1,Math.floor(it.buy*q*(.72+Math.random()*.85)));state.listings.push({id:state.nextId++,item:it.id,qty:q,price,owner:names[Math.floor(Math.random()*names.length)],mine:false})}}
+function refreshOrders(){state.orders=[];let names=['BlockBargain','DonutDealer','CraftyFox','Steve','EmeraldEnjoyer','xXMinerXx'];for(let i=0;i<5;i++){let it=ITEMS[Math.floor(Math.random()*ITEMS.length)],q=1+Math.floor(Math.random()*4),unit=Math.floor(it.sell*(1.4+Math.random()*1.8));state.orders.push({id:state.nextId++,item:it.id,qty:q,unit,owner:names[Math.floor(Math.random()*names.length)]})}save();notify('Fresh player orders posted!')}
+function fulfilOrder(id){let o=state.orders.find(x=>x.id===id);if(!o)return;if((state.inv[o.item]||0)<o.qty){notify(`Need ${o.qty}× ${item(o.item).name} to fulfil this order.`);return}addItem(o.item,-o.qty);let total=o.qty*o.unit;earn(total);state.orders=state.orders.filter(x=>x.id!==id);save();notify(`Order fulfilled! You earned ${fmt(total)}.`)}
+function renderShop(){$('shopGrid').innerHTML=ITEMS.map(it=>`<div class="item"><div class="item-top"><span class="emoji">${it.emoji}</span><span class="tag">${it.tag}</span></div><h3>${it.name}</h3><div class="desc">${it.desc}</div><div class="price">Buy ${fmt(it.buy)} <span style="color:var(--muted);font-size:11px">/ ea</span></div><button class="primary" onclick="buy('${it.id}')">Buy 1</button><button style="margin-top:6px" onclick="buy('${it.id}',5)">Buy 5</button></div>`).join('');$('sellGrid').innerHTML=ITEMS.filter(it=>(state.inv[it.id]||0)>0).map(it=>`<div class="item"><div class="item-top"><span class="emoji">${it.emoji}</span><span class="tag">OWNED: ${state.inv[it.id]}</span></div><h3>${it.name}</h3><div class="desc">Server buy-back price</div><div class="price">${fmt(it.sell)} <span style="color:var(--muted);font-size:11px">/ ea</span></div><button class="good" onclick="sell('${it.id}',1)">Sell 1</button><button style="margin-top:6px" onclick="sell('${it.id}',${state.inv[it.id]})">Sell all (${state.inv[it.id]})</button></div>`).join('')||'<div class="empty" style="grid-column:1/-1">Your pockets are empty. Buy some stock above to get started!</div>'}
+function renderListings(){$('auctionList').innerHTML=state.listings.length?state.listings.map(l=>{let it=item(l.item);return `<div class="listing"><div class="listing-left"><span class="emoji">${it.emoji}</span><div><h3>${l.qty}× ${it.name}</h3><small>Listed by ${l.owner}${l.mine?' · Your listing':''}</small></div></div><div class="listing-actions"><strong>${fmt(l.price)}</strong>${l.mine?`<button onclick="cancelListing(${l.id})">Cancel</button>`:`<button class="primary" onclick="buyListing(${l.id})">Buy</button>`}</div></div>`}).join(''):'<div class="empty">No listings right now. Add one of your items or refresh orders for new activity.</div>'}
+function renderOrders(){$('ordersList').innerHTML=state.orders.length?state.orders.map(o=>{let it=item(o.item),total=o.unit*o.qty,has=(state.inv[o.item]||0)>=o.qty;return `<div class="listing"><div class="listing-left"><span class="emoji">${it.emoji}</span><div><h3>Wanted: ${o.qty}× ${it.name}</h3><small>${o.owner} · ${fmt(o.unit)} per item · You own ${state.inv[o.item]||0}</small></div></div><div class="listing-actions"><strong>${fmt(total)}</strong><button class="${has?'good':''}" ${has?'':'disabled'} onclick="fulfilOrder(${o.id})">Fulfil</button></div></div>`}).join(''):'<div class="empty">No active orders. Click “New orders” to generate more.</div>'}
+function renderInventory(){let entries=Object.entries(state.inv).filter(([id,q])=>q>0);$('inventoryList').innerHTML=entries.length?entries.map(([id,q])=>{let it=item(id);return `<div class="inventory-row"><div class="listing-left"><span class="emoji">${it.emoji}</span><div><h3>${it.name}</h3><small>${q} owned · server value ${fmt(it.sell*q)}</small></div></div><div class="listing-actions"><button class="good" onclick="sell('${id}',1)">Sell 1</button><button onclick="switchTab('auction',document.querySelector('[data-tab=auction]'));$('listItem').value='${id}'">Auction</button></div></div>`}).join(''):'<div class="empty">Nothing in your inventory yet. Head to the shop and start trading.</div>'}
+function render(){ $('moneyTop').textContent=fmt(state.money);$('moneyStat').textContent=fmt(state.money);$('itemCount').textContent=countItems().toLocaleString();$('netWorth').textContent=fmt(state.money+invValue()+state.listings.filter(l=>l.mine).reduce((s,l)=>s+l.price,0));let lv=level(),floor=(lv-1)*(lv-1)*1000,next=lv*lv*1000,prog=Math.min(100,Math.max(0,(state.earned-floor)/(next-floor)*100));$('levelBar').style.width=prog+'%';$('levelText').textContent=`Level ${lv} · ${fmt(Math.max(0,state.earned-floor))} / ${fmt(next-floor)} earned toward next level`;let sel=$('listItem'),old=sel.value;sel.innerHTML=ITEMS.map(it=>`<option value="${it.id}" ${(state.inv[it.id]||0)<1?'disabled':''}>${it.emoji} ${it.name} (${state.inv[it.id]||0} owned)</option>`).join('');if(old&&state.inv[old])sel.value=old;renderShop();renderListings();renderOrders();renderInventory()}
+if(!state.listings.length)generateListings();if(!state.orders.length)refreshOrders();render();
+</script>
+
+<script id="live-market-engine">
+(function(){
+ const names=['BigDonut','EmeraldEnjoyer','xXMinerXx','BlockBargain','NotSoggy','Taco1234','LilNugget','CraftyFox','DiamondDude','VoidWalker','CobbleKing','MuffinPvP'];
+ const styles=['flipper','hoarder','bargain','panic','steady','whale'];
+ let tick=1,trades=0,events=[],lastTick=Date.now(),marketMood='Balanced';
+ const base={}; ITEMS.forEach(it=>base[it.id]=it.buy);
+ function say(name,icon,msg){events.unshift({name,icon,msg,time:new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'})});events=events.slice(0,14);renderFeed()}
+ function fmtDelta(n){return (n>=0?'+':'')+Math.round(n).toLocaleString('en-US')}
+ function price(it){return Math.max(1,Math.round(it.buy))}
+ function liveTick(){
+   tick++;
+   ITEMS.forEach(it=>{if(base[it.id]===undefined)base[it.id]=it.buy});
+   let movement=[];
+   ITEMS.forEach(it=>{
+     let old=it.buy;
+     // Demand, randomness and NPC activity influence each item independently.
+     let demand=(Math.random()-.48)*.11;
+     let npcPush=(Math.random()-.5)*.07;
+     if(it.id==='diamond'||it.id==='netherite'||it.id==='totem') npcPush+=Math.random()*.025;
+     let next=Math.round(old*(1+demand+npcPush));
+     it.buy=Math.max(Math.round(base[it.id]*.45),Math.min(Math.round(base[it.id]*2.8),next));
+     it.sell=Math.max(1,Math.round(it.buy*(.48+Math.random()*.05)));
+     let pct=(it.buy-old)/Math.max(1,old)*100;
+     if(Math.abs(pct)>2.2)movement.push({it,pct});
+   });
+   // A few independent simulated traders transact each market tick.
+   let actions=2+Math.floor(Math.random()*4);
+   for(let i=0;i<actions;i++){
+     let name=names[Math.floor(Math.random()*names.length)],style=styles[Math.floor(Math.random()*styles.length)];
+     let it=ITEMS[Math.floor(Math.random()*ITEMS.length)];
+     if(style==='hoarder'){
+       say(name,'📦',`is hoarding ${it.name} — demand is rising.`);
+       it.buy=Math.min(Math.round(base[it.id]*2.8),Math.round(it.buy*1.012));
+     } else if(style==='bargain'){
+       say(name,'🪙',`placed a bargain order for ${it.name} at ${fmt(it.buy*.85)}.`);
+     } else if(style==='panic'){
+       say(name,'⚠️',`dumped ${it.name} stock; market supply increased.`);
+       it.buy=Math.max(Math.round(base[it.id]*.45),Math.round(it.buy*.985));
+     } else if(style==='whale'){
+       say(name,'🐋',`made a large ${it.name} market purchase.`);
+       it.buy=Math.min(Math.round(base[it.id]*2.8),Math.round(it.buy*1.025));
+     } else if(style==='flipper'){
+       say(name,'🔁',`is flipping ${it.name}; watching the spread closely.`);
+     } else {
+       say(name,'🧑‍🌾',`completed a routine trade in ${it.name}.`);
+     }
+     trades++;
+   }
+   let avg=ITEMS.reduce((s,it)=>s+(it.buy-base[it.id])/base[it.id],0)/ITEMS.length;
+   marketMood=avg>.12?'Bullish':avg<-.12?'Bearish':'Balanced';
+   $('marketClock').textContent='TICK #'+tick+' · '+new Date().toLocaleTimeString();
+   $('aiCount').textContent=10+Math.floor(Math.random()*7);
+   $('tradeCount').textContent=trades.toLocaleString();
+   $('marketMood').textContent=marketMood;
+   renderTicker(); render();
+   if(movement.length){let m=movement[0];say('Market Watch','📊',`${m.it.name} moved ${m.pct>0?'up':'down'} ${Math.abs(m.pct).toFixed(1)}% this tick.`)}
+ }
+ function renderTicker(){
+   $('priceTicker').innerHTML=ITEMS.map(it=>{let pct=(it.buy-base[it.id])/base[it.id]*100;return `<span>${it.emoji} ${it.name} <b style="color:#ffff55">${fmt(it.buy)}</b> <b class="market-change ${pct>=0?'up':'down'}">${pct>=0?'▲':'▼'}${Math.abs(pct).toFixed(1)}%</b></span>`}).join('');
+ }
+ function renderFeed(){
+   if(!$('aiFeed'))return;
+   $('aiFeed').innerHTML=events.map(e=>`<div class="ai-event"><div class="ai-avatar">${e.icon}</div><div><strong>${e.name}</strong> <span style="color:#888">${e.time}</span><br>${e.msg}</div></div>`).join('');
+ }
+ // Expose market price changes to the original interface and update shop labels.
+ window.donutLiveMarket={getTick:()=>tick,getTrades:()=>trades,getMood:()=>marketMood};
+ say('Server','🟢','Live simulated economy connected. Smart NPC traders are entering the market.');
+ say('BigDonut','🍩','Looking for underpriced diamonds — post your offers!');
+ say('EmeraldEnjoyer','🟢','Emerald demand is steady. Keeping an eye on the market.');
+ renderTicker();
+ setInterval(()=>{lastTick=Date.now();liveTick();$('tickTimer').textContent='4s';},4000);
+ let countdown=3;setInterval(()=>{$('tickTimer').textContent=(countdown--<=0?4:countdown+1)+'s';if(countdown<0)countdown=3},1000);
+ // Make AI market listings refreshable, but do not let NPCs remove the user's own listings.
+ const oldRefresh=window.refreshOrders;
+ window.refreshOrders=function(){oldRefresh();say('Order Board','📜','New buy orders generated by the simulated player economy.')}
+})();
+</script>
+
+
+<script id="economy-features">
+(function(){
+const $=id=>document.getElementById(id), fmt=n=>'$'+Math.floor(n).toLocaleString('en-US');
+const extras=[
+ {id:'kelp',name:'Kelp Farm',emoji:'🌿',cost:650,rate:1,interval:10,desc:'Produces kelp every 10 seconds.'},
+ {id:'bonemeal',name:'Bone Meal Farm',emoji:'🦴',cost:1200,rate:1,interval:14,desc:'Produces bone meal every 14 seconds.'},
+ {id:'pumpkin',name:'Pumpkin Farm',emoji:'🎃',cost:2600,rate:1,interval:18,desc:'Grows pumpkins for a higher-value sale.'},
+ {id:'cactus',name:'Cactus Farm',emoji:'🌵',cost:4800,rate:1,interval:22,desc:'Slow, steady passive income.'},
+ {id:'sugarcane',name:'Sugar Cane Farm',emoji:'🎋',cost:8500,rate:2,interval:24,desc:'A bigger farm that produces two per harvest.'}
+];
+const gear=[
+ {id:'helmet',name:'Netherite Helmet',emoji:'🪖',cost:12000,desc:'Heavy-duty head protection.'},
+ {id:'chestplate',name:'Netherite Chestplate',emoji:'🥋',cost:24000,desc:'The ultimate chest armour.'},
+ {id:'leggings',name:'Netherite Leggings',emoji:'👖',cost:18000,desc:'Armour for the long grind.'},
+ {id:'boots',name:'Netherite Boots',emoji:'🥾',cost:10000,desc:'Fast feet, expensive style.'},
+ {id:'crystal',name:'End Crystal',emoji:'🔮',cost:750,desc:'A crystal PvP arena staple.'},
+ {id:'totemgear',name:'Totem of Undying',emoji:'🗿',cost:4500,desc:'A rare survival collectible.'}
+];
+let extraState={farms:{},ender:{},gear:{},arenaHistory:[],arenaBetOn:null,arenaRound:0,arenaBusy:false};
+try{Object.assign(extraState,JSON.parse(localStorage.getItem('donutExtrasSave')||'{}'))}catch(e){}
+function saveExtra(){localStorage.setItem('donutExtrasSave',JSON.stringify(extraState));renderExtra()}
+function owned(id){return state.inv[id]||0}
+function changeItem(id,q){state.inv[id]=(state.inv[id]||0)+q;if(state.inv[id]<=0)delete state.inv[id]}
+function moneySpend(n){if(state.money<n){notify('Not enough money!');return false}state.money-=n;return true}
+function addMoney(n){state.money+=n;state.earned=(state.earned||0)+n}
+function itemValue(id){let it=ITEMS.find(x=>x.id===id);return it?it.sell: id==='kelp'?18:id==='bonemeal'?35:id==='pumpkin'?65:id==='cactus'?85:id==='sugarcane'?100:0}
+function buyFarm(id){let f=extras.find(x=>x.id===id);if(!f)return;if(!moneySpend(f.cost))return;extraState.farms[id]=(extraState.farms[id]||0)+1;save();saveExtra();notify(f.name+' built!')}
+function collectFarm(id){let f=extras.find(x=>x.id===id),num=extraState.farms[id]||0;if(!f||!num)return;let now=Date.now(),last=extraState['last_'+id]||now;let cycles=Math.floor((now-last)/(f.interval*1000));if(cycles<1){notify('Not ready yet — give your farm a little longer.');return}let qty=cycles*f.rate*num;extraState['last_'+id]=last+cycles*f.interval*1000;changeItem(id,qty);save();saveExtra();notify('Collected '+qty+' '+f.name+' output!')}
+function renderExtra(){
+ if($('farmGrid'))$('farmGrid').innerHTML=extras.map(f=>`<div class="item"><div class="item-top"><span class="emoji">${f.emoji}</span><span class="tag">${f.interval}s cycle</span></div><h3>${f.name}</h3><div class="desc">${f.desc}</div><div class="price">${fmt(f.cost)}</div><button class="primary" onclick="buyFarm('${f.id}')">Build farm</button></div>`).join('');
+ if($('myFarms'))$('myFarms').innerHTML=extras.filter(f=>extraState.farms[f.id]).map(f=>`<div class="listing"><div class="listing-left"><span class="emoji">${f.emoji}</span><div><h3>${f.name} × ${extraState.farms[f.id]}</h3><small>Output: ${f.rate*extraState.farms[f.id]} every ${f.interval}s · Item value ${fmt(itemValue(f.id))}</small></div></div><button class="good" onclick="collectFarm('${f.id}')">Collect</button></div>`).join('')||'<div class="empty">You have no farms yet. Buy one above to start passive production.</div>';
+ if($('enderGrid'))$('enderGrid').innerHTML=ITEMS.map(it=>{let q=extraState.ender[it.id]||0;return `<div class="item"><div class="item-top"><span class="emoji">${it.emoji}</span><span class="tag">${q} stored</span></div><h3>${it.name}</h3><div class="desc">Inventory: ${owned(it.id)}</div><div class="controls"><button onclick="enderStore('${it.id}',1)" ${owned(it.id)<1?'disabled':''}>Store 1</button><button onclick="enderTake('${it.id}',1)" ${q<1?'disabled':''}>Take 1</button></div></div>`}).join('');
+ if($('gearGrid'))$('gearGrid').innerHTML=gear.map(g=>`<div class="item"><div class="item-top"><span class="emoji">${g.emoji}</span><span class="tag">${extraState.gear[g.id]?'OWNED':'GEAR'}</span></div><h3>${g.name}</h3><div class="desc">${g.desc}</div><div class="price">${fmt(g.cost)}</div><button class="${extraState.gear[g.id]?'good':'primary'}" onclick="buyGear('${g.id}')" ${extraState.gear[g.id]?'disabled':''}>${extraState.gear[g.id]?'Owned':'Purchase'}</button></div>`).join('');
+ if($('arenaHistory'))$('arenaHistory').innerHTML=extraState.arenaHistory.length?extraState.arenaHistory.slice(0,10).map(h=>`<div class="listing"><div class="listing-left"><span class="emoji">${h.winner==='A'?'⚔️':'🗡️'}</span><div><h3>Round ${h.round}: ${h.name} wins</h3><small>${h.bet?`Your bet: ${h.bet}`:'No bet placed'} · ${h.result}</small></div></div><strong style="color:${h.won?'#55ff55':'#ff5555'}">${h.won?'+'+fmt(h.payout):h.bet?'-'+fmt(h.bet):'—'}</strong></div>`).join(''):'<div class="empty">No arena rounds yet.</div>';
+}
+window.buyFarm=buyFarm;window.collectFarm=collectFarm;
+window.enderStore=function(id,q){q=Math.min(q,owned(id));if(q<1)return;changeItem(id,-q);extraState.ender[id]=(extraState.ender[id]||0)+q;save();saveExtra();notify('Stored '+q+' '+ITEMS.find(x=>x.id===id).name+' in your Ender Chest.')};
+window.enderTake=function(id,q){q=Math.min(q,extraState.ender[id]||0);if(q<1)return;extraState.ender[id]-=q;changeItem(id,q);save();saveExtra();notify('Withdrawn '+q+' items.')};
+window.buyGear=function(id){let g=gear.find(x=>x.id===id);if(!g||extraState.gear[id])return;if(!moneySpend(g.cost))return;extraState.gear[id]=true;save();saveExtra();notify(g.name+' purchased!')};
+window.betArena=function(side){if(extraState.arenaBusy){notify('Wait for the current round to finish.');return}extraState.arenaBetOn=side;$('arenaState').textContent='BET LOCKED: FIGHTER '+side;notify('Bet target selected: Fighter '+side+'. Set stake then start the fight.')};
+window.startArena=function(){
+ if(extraState.arenaBusy){notify('The arena is already fighting!');return}
+ let stake=Math.floor(+$('arenaBet').value);if(!extraState.arenaBetOn){notify('Choose Fighter A or B first.');return}if(stake<1){notify('Enter a valid bet.');return}if(!moneySpend(stake)){render();return}
+ extraState.arenaBusy=true;extraState.arenaRound=(extraState.arenaRound||0)+1;
+ const a=['VoidWalker','CrystalKing','EnderSlayer','PopPvP','TotemLord','ObsidianAce'],b=['CrystalKing','VoidWalker','AnchorMain','PearlClutcher','BedrockBeast','ComboCrafter'];
+ let an=a[Math.floor(Math.random()*a.length)],bn=b[Math.floor(Math.random()*b.length)];
+ $('fighterA').textContent=an;$('fighterB').textContent=bn;$('hpA').textContent='❤❤❤❤❤';$('hpB').textContent='❤❤❤❤❤';$('arenaState').textContent='⚔️ FIGHT IN PROGRESS';$('arenaLog').textContent='Both fighters are crystal-spamming…';
+ let ticks=0,ha=5,hb=5;
+ let timer=setInterval(()=>{ticks++;let hitA=Math.random()<.52,damage=1+Math.floor(Math.random()*2);if(hitA)hb=Math.max(0,hb-damage);else ha=Math.max(0,ha-damage);$('hpA').textContent='❤'.repeat(ha)+'♡'.repeat(5-ha);$('hpB').textContent='❤'.repeat(hb)+'♡'.repeat(5-hb);$('arenaLog').textContent=hitA?an+' landed a crystal combo!':bn+' caught them with an explosive counter!';if(ha===0||hb===0||ticks>=7){clearInterval(timer);let winner=(ha===0&&hb===0)?(Math.random()<.5?'A':'B'):ha===0?'B':hb===0?'A':Math.random()<.5?'A':'B';let won=winner===extraState.arenaBetOn,payout=won?Math.floor(stake*1.8):0;if(won)addMoney(payout);let winnerName=winner==='A'?an:bn;extraState.arenaHistory.unshift({round:extraState.arenaRound,winner,name:winnerName,bet:stake,won,payout,result:won?'You won the bet!':`Fighter ${extraState.arenaBetOn} lost`});extraState.arenaHistory=extraState.arenaHistory.slice(0,20);extraState.arenaBusy=false;extraState.arenaBetOn=null;$('arenaState').textContent=winnerName+' WINS!';$('arenaLog').textContent=won?'Your prediction was right! Winnings paid.':'Wrong pick this time — next fight is random.';save();saveExtra();render();notify(won?'Arena bet won! '+fmt(payout)+' paid.':'Arena bet lost. Better luck next round.');}},700);
+ save();render();
+};
+
+// Partial order fulfilment: deliver whatever quantity you own and get paid proportionally.
+const oldFulfil=window.fulfilOrder;
+window.fulfilOrder=function(id){
+ let o=state.orders.find(x=>x.id===id);if(!o)return;
+ let have=owned(o.item),qty=Math.min(have,o.qty);
+ if(qty<1){notify('You need at least one matching item.');return}
+ changeItem(o.item,-qty);let total=qty*o.unit;addMoney(total);
+ o.qty-=qty;
+ if(o.qty<=0)state.orders=state.orders.filter(x=>x.id!==id);
+ save();saveExtra();render();notify(`Delivered ${qty} item(s) for ${fmt(total)}. ${o.qty>0?o.qty+' still needed on this order.':'Order completed!'}`);
+};
+// Ensure order cards allow partial deliveries rather than disabling them when short.
+const oldRenderOrders=window.renderOrders;
+window.renderOrders=function(){
+ $('ordersList').innerHTML=state.orders.length?state.orders.map(o=>{let it=ITEMS.find(x=>x.id===o.item),have=owned(o.item),qty=Math.min(have,o.qty),total=qty*o.unit;return `<div class="listing"><div class="listing-left"><span class="emoji">${it.emoji}</span><div><h3>Wanted: ${o.qty}× ${it.name}</h3><small>${o.owner} · ${fmt(o.unit)} per item · You own ${have}</small></div></div><div class="listing-actions"><strong>${fmt(o.qty*o.unit)} total</strong><button class="${qty?'good':''}" ${qty?'':'disabled'} onclick="fulfilOrder(${o.id})">${qty?'Deliver '+qty+' ('+fmt(total)+')':'Need items'}</button></div></div>`}).join(''):'<div class="empty">No active orders. Click “New orders” to generate more.</div>';
+};
+
+// Farm-produced goods become standard inventory items and can be sold for their displayed value.
+const origSell=window.sell;
+window.sell=function(id,q=1){if(['kelp','bonemeal','pumpkin','cactus','sugarcane'].includes(id)){let qty=Math.min(q,owned(id));if(qty<1)return;let total=itemValue(id)*qty;changeItem(id,-qty);addMoney(total);save();saveExtra();notify('Sold farm goods for '+fmt(total));return}origSell(id,q)};
+const origRenderShop=window.renderShop;
+window.renderShop=function(){
+ origRenderShop();
+ let goods=[{id:'kelp',name:'Kelp',emoji:'🌿',buy:28,sell:18,desc:'Farm crop.'},{id:'bonemeal',name:'Bone Meal',emoji:'🦴',buy:50,sell:35,desc:'Fertiliser from your farm.'},{id:'pumpkin',name:'Pumpkin',emoji:'🎃',buy:90,sell:65,desc:'Farm produce.'},{id:'cactus',name:'Cactus',emoji:'🌵',buy:120,sell:85,desc:'Desert farm produce.'},{id:'sugarcane',name:'Sugar Cane',emoji:'🎋',buy:145,sell:100,desc:'Tall farm crop.'}];
+ // Render farm goods into a separate add-on row under the normal shop.
+ let old=$('farmGoodsShop');if(old)old.remove();
+ let box=document.createElement('div');box.id='farmGoodsShop';box.className='panel';box.innerHTML='<div class="panel-head"><div><h2>🌾 Farm produce</h2><div class="sub">Sell what your farms harvest, or buy some to fulfil orders.</div></div></div><div class="grid">'+goods.map(it=>`<div class="item"><div class="item-top"><span class="emoji">${it.emoji}</span><span class="tag">OWNED: ${owned(it.id)}</span></div><h3>${it.name}</h3><div class="desc">${it.desc}</div><div class="price">Sell ${fmt(it.sell)} / ea</div><button class="good" onclick="sell('${it.id}',${Math.max(1,owned(it.id))})" ${owned(it.id)<1?'disabled':''}>Sell all</button><button style="margin-top:5px" onclick="buyFarmProduce('${it.id}')">Buy 1 · ${fmt(it.buy)}</button></div>`).join('')+'</div>';
+ $('shop').appendChild(box);
+};
+window.buyFarmProduce=function(id){let vals={kelp:28,bonemeal:50,pumpkin:90,cactus:120,sugarcane:145};let cost=vals[id];if(!cost||!moneySpend(cost))return;changeItem(id,1);save();saveExtra();notify('Bought farm produce.');};
+const oldRender=window.render;
+window.render=function(){oldRender();renderExtra()};
+setTimeout(()=>{renderExtra();sayAI();},50);
+function sayAI(){/* no-op placeholder for compatibility */}
+setInterval(()=>{let now=Date.now();extras.forEach(f=>{if(extraState.farms[f.id]&&!extraState['last_'+f.id])extraState['last_'+f.id]=now;});},2000);
+})();
+</script>
+
+<script id="shard-spawner-gambling-additions">
+(function(){
+  // Additive upgrade: the original game code and all existing systems remain intact.
+  state.shards = Number.isFinite(state.shards) ? state.shards : 0;
+  state.spawners = state.spawners && typeof state.spawners==='object' ? state.spawners : {skeleton:0};
+  if(typeof state.spawners.skeleton!=='number') state.spawners.skeleton=0;
+  const tabs=document.querySelector('.tabs');
+  tabs.insertAdjacentHTML('beforeend', '<button data-tab="shards" onclick="switchTab(\'shards\',this)">💠 Shard Shop</button><button data-tab="gambling" onclick="switchTab(\'gambling\',this)">🎲 Gambling</button>');
+  const footer=document.querySelector('.footer');
+  footer.insertAdjacentHTML('beforebegin', `
+  <section id="shards" class="tab-content" hidden>
+    <div class="panel"><div class="panel-head"><div><h2>💠 Shard Shop</h2><div class="sub">Trade shards for rare netherite gear and mob spawners.</div></div><span class="tag">SHARDS: <b id="shardBalance">0</b></span></div>
+    <div class="controls" style="margin-bottom:12px"><button class="good" onclick="claimShardBounty()">✨ Daily shard bounty (+2)</button><button onclick="mineForShard()">⛏️ Mine for a shard ($50)</button></div><div id="shardShopGrid" class="grid"></div></div>
+    <div class="panel"><div class="panel-head"><div><h2>🧟 Your Spawners</h2><div class="sub">Skeleton spawners generate 2 bones every 15 seconds. Sell the bones for money.</div></div></div><div id="spawnerList" class="market-list"></div></div>
+  </section>
+  <section id="gambling" class="tab-content" hidden><div class="panel"><div class="panel-head"><div><h2>🎲 Donut Casino</h2><div class="sub">Bet in-game money only. Wins and losses are simulated.</div></div><span class="tag">WALLET: <b id="gambleWallet">$0</b></span></div>
+  <div class="sell-form"><select id="gambleMode"><option value="coin">Coin flip — 2× payout (50%)</option><option value="dice">Lucky dice — 5× payout (1 in 6)</option><option value="slots">Donut slots — 8× jackpot (1 in 8)</option></select><input id="gambleBet" type="number" min="1" value="100" placeholder="Bet amount"><button class="primary" onclick="gambleMoney()">Place bet</button></div><div id="gambleResult" class="notice" style="display:block;margin-top:12px">Choose a game and place a bet to try your luck.</div></div></section>`);
+  // Add a sell-all action without replacing or removing the existing sell controls.
+  const sellPanel=document.querySelector('#shop .panel:nth-child(2) .panel-head');
+  sellPanel.insertAdjacentHTML('beforeend','<button class="good" onclick="sellEverythingOwned()">💰 Sell EVERYTHING</button>');
+  const offers=[
+    {id:'netherite_sword',name:'Netherite Sword',emoji:'⚔️',cost:12,desc:'A rare netherite weapon.'},
+    {id:'netherite_pickaxe',name:'Netherite Pickaxe',emoji:'⛏️',cost:10,desc:'Premium netherite mining tool.'},
+    {id:'netherite_chestplate',name:'Netherite Chestplate',emoji:'🛡️',cost:18,desc:'Strong netherite armour.'},
+    {id:'spawner',name:'Skeleton Spawner',emoji:'🧟',cost:25,desc:'Generates bones automatically every 15 seconds.'}
+  ];
+  window.renderShardShop=function(){
+    $('shardBalance').textContent=state.shards.toLocaleString();
+    $('gambleWallet').textContent=fmt(state.money);
+    $('shardShopGrid').innerHTML=offers.map(o=>`<div class="item"><div class="item-top"><span class="emoji">${o.emoji}</span><span class="tag">${o.cost} SHARDS</span></div><h3>${o.name}</h3><div class="desc">${o.desc}</div><div class="price">💠 ${o.cost} shards</div><button class="primary" onclick="buyShardItem('${o.id}',${o.cost})">Purchase</button></div>`).join('');
+    const n=state.spawners.skeleton||0;
+    $('spawnerList').innerHTML=n?`<div class="listing"><div class="listing-left"><span class="emoji">🧟</span><div><h3>Skeleton Spawner</h3><small>${n} owned · generates ${n*2} bones every 15 seconds</small></div></div><div class="listing-actions"><button class="good" onclick="collectSpawnerBones()">Collect bones</button></div></div>`:'<div class="empty">No spawners owned yet. Buy one in the Shard Shop.</div>';
+  };
+  const oldRender=window.render;
+  window.render=function(){oldRender();window.renderShardShop()};
+  window.buyShardItem=function(id,cost){if(state.shards<cost){notify('Not enough shards. Claim your daily bounty or mine for one.');return}state.shards-=cost;if(id==='spawner'){state.spawners.skeleton=(state.spawners.skeleton||0)+1}else addItem(id,1);save();notify(id==='spawner'?'Skeleton spawner purchased!':'Purchased '+item(id).name+'!')};
+  window.claimShardBounty=function(){const day=new Date().toISOString().slice(0,10);if(state.shardDay===day){notify('You already claimed today’s shard bounty.');return}state.shardDay=day;state.shards+=2;save();notify('Daily shard bounty: +2 shards!')};
+  window.mineForShard=function(){if(!spend(50))return;state.shards+=1;state.transactions++;save();notify('Mining run complete: +1 shard!')};
+  window.collectSpawnerBones=function(){const n=(state.spawners.skeleton||0)*2;if(!n){notify('No spawners to collect from.');return}addItem('skeleton_bone',n);save();notify('Collected '+n+' bones!')};
+  window.sellEverythingOwned=function(){let total=0,quantity=0;Object.entries(state.inv).forEach(([id,q])=>{const it=item(id);if(it&&q>0){total+=it.sell*q;quantity+=q;delete state.inv[id]}});if(!quantity){notify('Your inventory is empty.');return}earn(total);save();notify('Sold '+quantity+' items for '+fmt(total)+'!')};
+  window.gambleMoney=function(){const bet=Math.floor(Number($('gambleBet').value)),mode=$('gambleMode').value;if(!Number.isFinite(bet)||bet<1){notify('Enter a valid bet amount.');return}if(!spend(bet))return;const chance=mode==='coin'?.5:mode==='dice'?1/6:1/8,mult=mode==='coin'?2:mode==='dice'?5:8,win=Math.random()<chance;let message;if(win){const payout=bet*mult;earn(payout);message='🎉 WIN! You received '+fmt(payout)+' ('+mult+'× payout).'}else message='💸 You lost '+fmt(bet)+'. Try again if you want.';$('gambleResult').textContent=message;$('gambleResult').style.color=win?'#55ff55':'#ff7777';save();notify(win?'Gambling win!':'Bet lost!')};
+  // Persistently simulate spawner production while the game is open.
+  setInterval(function(){const n=(state.spawners.skeleton||0)*2;if(n>0){addItem('skeleton_bone',n);save();notify('Skeleton spawners generated '+n+' bones!')}},15000);
+  render();
+})();
+</script>
+
+
+<div id="settingsOverlay" hidden style="position:fixed;inset:0;z-index:999;background:#000b;align-items:center;justify-content:center;padding:16px"><section class="panel" style="width:min(560px,100%);max-height:90vh;overflow:auto;background:#c6c6c6;color:#222"><div class="panel-head"><h2>⚙️ Settings</h2><button onclick="closeSettings()">✕ Close</button></div><div style="display:grid;gap:12px"><label><input id="settingMarket" type="checkbox" checked onchange="applySettings()"> Show live market HUD</label><label><input id="settingAI" type="checkbox" checked onchange="applySettings()"> Show AI trading chat</label><label><input id="settingCompact" type="checkbox" onchange="applySettings()"> Compact item menus</label><p>Your progress and settings are saved in this browser's local storage.</p><button onclick="resetProgress()" style="background:#9b2020;color:white">🗑️ Reset all progress</button><hr><b>Credits</b><p>Made by <b>@iwotslegacy</b></p><a href="https://dsc.gg/iwott" target="_blank" rel="noopener noreferrer">Join the Discord ↗</a></div></section></div>
+<script id="settings-orders-persistence">
+function openSettings(){const x=$('settingsOverlay');x.hidden=false;x.style.display='flex';const p=state.settings||{};$('settingMarket').checked=p.market!==false;$('settingAI').checked=p.ai!==false;$('settingCompact').checked=!!p.compact;applySettings(false)}
+function closeSettings(){$('settingsOverlay').hidden=true;$('settingsOverlay').style.display='none'}
+function applySettings(persist=true){state.settings={market:$('settingMarket').checked,ai:$('settingAI').checked,compact:$('settingCompact').checked};const hud=document.querySelector('.hudgrid'),ai=$('aiPanel');if(hud)hud.style.display=state.settings.market?'':'none';if(ai)ai.style.display=state.settings.ai?'':'none';document.body.classList.toggle('compact-menus',state.settings.compact);if(persist)save()}
+function resetProgress(){if(!confirm('Reset ALL Donut Economy progress? This cannot be undone.'))return;localStorage.removeItem('donutEconomySave');localStorage.removeItem('donutExtrasSave');location.reload()}
+function createPlayerOrder(){const id=$('createOrderItem').value,qty=Math.floor(Number($('createOrderQty').value)),unit=Math.floor(Number($('createOrderUnit').value));if(!item(id)||!Number.isFinite(qty)||qty<1||!Number.isFinite(unit)||unit<1){notify('Choose an item, quantity and valid price.');return}const total=qty*unit;if(!Number.isSafeInteger(total)){notify('Order total is too large.');return}if(!spend(total))return;state.orders.unshift({id:state.nextId++,item:id,qty,unit,owner:'You',mine:true,reserved:total});save();notify('Your buy order is live! Reserved '+fmt(total)+'.')}
+function cancelPlayerOrder(id){const o=state.orders.find(x=>x.id===id&&x.mine);if(!o)return;state.money+=o.reserved||o.qty*o.unit;state.orders=state.orders.filter(x=>x.id!==id);save();notify('Order cancelled; reserved money returned.')}
+function fulfillPlayerOrder(id){const o=state.orders.find(x=>x.id===id&&x.mine);if(!o)return;const q=Math.min(o.qty,state.inv[o.item]||0);if(q<1){notify('You need that item in your inventory to fill this order.');return}addItem(o.item,-q);o.qty-=q;o.reserved=Math.max(0,(o.reserved||0)-q*o.unit);state.money+=q*o.unit;if(o.qty<=0)state.orders=state.orders.filter(x=>x.id!==id);save();notify('Sold '+q+' items to your order for '+fmt(q*o.unit)+'.')}
+const originalRenderSettingsOrders=window.render;
+window.render=function(){originalRenderSettingsOrders();const sel=$('createOrderItem');if(!sel)return;const prev=sel.value;sel.innerHTML=ITEMS.map(it=>`<option value="${it.id}">${it.emoji} ${it.name}</option>`).join('');if(prev&&item(prev))sel.value=prev;$('myOrdersList').innerHTML=state.orders.filter(o=>o.mine).map(o=>`<div class="listing"><div class="listing-left"><div><h3>Buying ${o.qty}× ${item(o.item).name}</h3><small>Your order · ${fmt(o.unit)} each · Reserved ${fmt(o.reserved||o.qty*o.unit)}</small></div></div><div class="listing-actions"><button class="good" onclick="fulfillPlayerOrder(${o.id})">Fill from inventory</button><button onclick="cancelPlayerOrder(${o.id})">Cancel</button></div></div>`).join('')||'<div class="empty">You have no active personal buy orders.</div>'};
+const originalSaveSettingsOrders=window.save;
+window.save=function(){try{localStorage.setItem('donutEconomySave',JSON.stringify(state))}catch(e){notify('Unable to save: browser storage may be full.')}window.render()};
+window.addEventListener('beforeunload',()=>{try{localStorage.setItem('donutEconomySave',JSON.stringify(state));if(typeof extraState!=='undefined')localStorage.setItem('donutExtrasSave',JSON.stringify(extraState))}catch(e){}});
+if(state.settings){$('settingMarket').checked=state.settings.market!==false;$('settingAI').checked=state.settings.ai!==false;$('settingCompact').checked=!!state.settings.compact;applySettings(false)}
+window.render();
+</script>
+<style>.compact-menus .item{padding:5px}.compact-menus .item .desc{min-height:0}.compact-menus .grid{gap:3px}</style>
+
+
+<script id="scoreboard-afk-offline-upgrade">
+(function(){
+  // Persistent stats and AFK shard accrual; all existing game systems are retained.
+  state.shards=Number.isFinite(state.shards)?state.shards:0;
+  state.stats=state.stats||{};
+  const now=Date.now();
+  state.stats.createdAt=state.stats.createdAt||now;
+  state.stats.playMs=Number(state.stats.playMs)||0;
+  state.stats.lastSeen=Number(state.stats.lastSeen)||now;
+  state.stats.afkRemainder=Number(state.stats.afkRemainder)||0;
+  state.stats.shardsEarned=Number(state.stats.shardsEarned)||state.shards;
+  state.stats.totalEarned=Number(state.stats.totalEarned)||Number(state.earned)||0;
+  state.stats.sessions=Number(state.stats.sessions)||0;
+  state.stats.sessions++;
+  // Earn 1 shard per 5 minutes away/open, capped at 12 hours per return.
+  function accrue(elapsed){
+    elapsed=Math.max(0,Math.min(elapsed,12*60*60*1000));
+    const total=elapsed+(state.stats.afkRemainder||0),earned=Math.floor(total/300000);
+    state.stats.afkRemainder=total%300000;
+    if(earned>0){state.shards+=earned;state.stats.shardsEarned+=earned;state.stats.afkShards=(state.stats.afkShards||0)+earned;}
+    return earned;
+  }
+  const offlineEarned=accrue(now-state.stats.lastSeen);
+  state.stats.lastSeen=now;
+  const tabs=document.querySelector('.tabs');
+  if(tabs&&!tabs.querySelector('[data-tab="scoreboard"]'))tabs.insertAdjacentHTML('beforeend','<button data-tab="scoreboard" onclick="switchTab(\'scoreboard\',this)">🏆 Scoreboard</button>');
+  const footer=document.querySelector('.footer');
+  if(footer&&!$('scoreboard'))footer.insertAdjacentHTML('beforebegin',`<section id="scoreboard" class="tab-content" hidden><div class="panel"><div class="panel-head"><div><h2>🏆 Scoreboard</h2><div class="sub">Your personal Donut Economy stats.</div></div><button onclick="renderScoreboard()">↻ Refresh</button></div><div id="scoreboardGrid" class="grid"></div><div class="notice" style="display:block;margin-top:12px">💠 AFK shards: earn 1 shard every 5 minutes while playing or away. Offline progress is calculated when you return (up to 12 hours per visit).</div></div></section>`);
+  function duration(ms){let m=Math.floor(ms/60000),h=Math.floor(m/60);m%=60;let d=Math.floor(h/24);h%=24;return d?`${d}d ${h}h ${m}m`:h?`${h}h ${m}m`:`${m}m`}
+  window.renderScoreboard=function(){const el=$('scoreboardGrid');if(!el)return;const inventoryCount=Object.values(state.inv||{}).reduce((a,b)=>a+Math.max(0,Number(b)||0),0);const invValue=Object.entries(state.inv||{}).reduce((sum,[id,q])=>{const it=item(id);return sum+(it?it.sell*Math.max(0,Number(q)||0):0)},0);const listingValue=(state.listings||[]).filter(x=>x.mine).reduce((a,x)=>a+(Number(x.price)||0),0);const stats=[['💰 Wallet',fmt(state.money)],['💎 Shards',(state.shards||0).toLocaleString()],['🏦 Net worth',fmt((state.money||0)+invValue+listingValue)],['🎒 Items owned',inventoryCount.toLocaleString()],['📈 Total earned',fmt(state.earned||0)],['🔁 Transactions',(state.transactions||0).toLocaleString()],['🛒 Auction listings',(state.listings||[]).filter(x=>x.mine).length],['📜 Active orders',(state.orders||[]).length],['🧟 Skeleton spawners',(state.spawners&&state.spawners.skeleton)||0],['💠 AFK shards earned',(state.stats.afkShards||0).toLocaleString()],['⏱️ Playtime',duration((state.stats.playMs||0)+(Date.now()-(state.stats.sessionStart||Date.now())))],['📅 Account age',duration(Date.now()-(state.stats.createdAt||Date.now()))],['🎁 Shards earned total',(state.stats.shardsEarned||0).toLocaleString()],['🖥️ Sessions',(state.stats.sessions||1).toLocaleString()]];el.innerHTML=stats.map(([label,value])=>`<div class="item"><div class="desc">${label}</div><h3 style="font-size:23px;margin-top:8px">${value}</h3></div>`).join('')};
+  const oldRender=window.render;
+  window.render=function(){oldRender();window.renderScoreboard()};
+  state.stats.sessionStart=Date.now();
+  let lastTick=Date.now();
+  setInterval(function(){const t=Date.now();const delta=t-lastTick;lastTick=t;state.stats.playMs+=delta;const got=accrue(delta);state.stats.lastSeen=t;if(got)notify('AFK bonus: +'+got+' shard'+(got===1?'':'s')+'!');try{localStorage.setItem('donutEconomySave',JSON.stringify(state));if(typeof extraState!=='undefined')localStorage.setItem('donutExtrasSave',JSON.stringify(extraState))}catch(e){}window.renderScoreboard()},15000);
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden'){state.stats.lastSeen=Date.now();try{localStorage.setItem('donutEconomySave',JSON.stringify(state))}catch(e){}}});
+  window.addEventListener('beforeunload',function(){state.stats.lastSeen=Date.now();try{localStorage.setItem('donutEconomySave',JSON.stringify(state))}catch(e){}});
+  if(offlineEarned>0)setTimeout(()=>notify('Welcome back! You earned '+offlineEarned+' AFK shard'+(offlineEarned===1?'':'s')+' while away.'),700);
+  try{const link=document.createElement('link');link.rel='manifest';link.href='./manifest.webmanifest';document.head.appendChild(link);if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost'))navigator.serviceWorker.register('./sw.js').catch(()=>{});}catch(e){}
+  window.renderScoreboard();try{localStorage.setItem('donutEconomySave',JSON.stringify(state))}catch(e){}
+})();
+</script>
+
+</body>
+</html>
